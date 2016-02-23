@@ -28,7 +28,7 @@ public class CrimeListFragment extends Fragment {
         private Crime mCrime;
 
 
-        public CrimeHolder(View itemView){
+        public CrimeHolder(View itemView) {
             super(itemView);
             itemView.setOnClickListener(this);
             mTitleTextView = (TextView) itemView.findViewById(R.id.list_item_crime_title_text_view);
@@ -50,7 +50,7 @@ public class CrimeListFragment extends Fragment {
         }
     }
 
-    private class CrimeAdapter extends  RecyclerView.Adapter<CrimeHolder>{
+    private class CrimeAdapter extends RecyclerView.Adapter<CrimeHolder> {
         private List<Crime> mCrimes;
 
         public CrimeAdapter(List<Crime> crimes) {
@@ -103,8 +103,7 @@ public class CrimeListFragment extends Fragment {
             mAdapter = new CrimeAdapter(crimes);
             mCrimeRecyclerView.setAdapter(mAdapter);
         } else {
-            // mAdapter.notifyDataSetChanged();
-            // mAdapter.notifyItemChanged();
+            mAdapter.notifyDataSetChanged();
         }
     }
 
