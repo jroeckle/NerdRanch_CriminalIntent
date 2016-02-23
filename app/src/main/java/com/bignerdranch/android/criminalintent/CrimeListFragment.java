@@ -168,7 +168,7 @@ public class CrimeListFragment extends Fragment {
     }
 
     @Override
-    public void onSavedInstanceState(Bundle outState) {
+    public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putBoolean(SAVED_SUBTITLE_VISIBLE, mSubtitleVisibile);
     }
