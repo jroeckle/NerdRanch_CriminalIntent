@@ -1,5 +1,6 @@
 package com.bignerdranch.android.criminalintent;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -28,6 +29,20 @@ public class CrimeListFragment extends Fragment {
     private RecyclerView mCrimeRecyclerView;
     private CrimeAdapter mAdapter;
     private boolean mSubtitleVisibile;
+    private Callbacks mCallbacks;
+
+    /**
+     * Required interface for hosting activities.
+     */
+    public interface Callbacks {
+        void onCrimeSelected(Crime crime);
+    }
+
+    @Override
+    public void onAttach(Activity activity){
+        super.onAttach(activity);
+        mCallbacks = (Callbacks) activity;
+    }
 
     private class CrimeHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private TextView mTitleTextView;
@@ -54,8 +69,7 @@ public class CrimeListFragment extends Fragment {
 
         @Override
         public void onClick(View v) {
-            Intent i = CrimePagerActivity.newIntent(getActivity(), mCrime.getId());
-            startActivity(i);
+            mCallbacks.onCrimeSelected(mCrime);
         }
     }
 
@@ -144,7 +158,11 @@ public class CrimeListFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_iten_new_crime:
-                startNewCrimeActivtiy();
+                Crime crime = new Crime();
+                CrimeLab.get(getActivity()).addCrime(crime);
+                updateUI();
+                mCallbacks.onCrimeSelected(crime);
+
                 return true;
             case R.id.meni_item_show_subtitle:
                 mSubtitleVisibile = !mSubtitleVisibile;
@@ -177,7 +195,13 @@ public class CrimeListFragment extends Fragment {
         outState.putBoolean(SAVED_SUBTITLE_VISIBLE, mSubtitleVisibile);
     }
 
-    private void updateUI() {
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mCallbacks = null;
+    }
+
+    public void updateUI() {
         CrimeLab crimeLab = CrimeLab.get(getActivity());
         List<Crime> crimes = crimeLab.getCrimes();
 
